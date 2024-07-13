@@ -7,8 +7,6 @@ export const xjson_NInfinity = `${magicNum}NInfinity`;
 export const xjson_NaN = `${magicNum}NaN`;
 export const xjson_Date = `${magicNum}Date-`;
 export const xjson_Buffer = `${magicNum}Buffer-`;
-import util from 'util';
-
 
 export
 function stringify(value: any) {
