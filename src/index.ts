@@ -16,7 +16,8 @@ function stringify(value: any) {
     if (value === Infinity) return xjson_Infinity;
     if (value === -Infinity) return xjson_NInfinity;
     if (Number.isNaN(value)) return xjson_NaN;
-    if (Buffer.isBuffer(value)) return `${xjson_Buffer}${value.toString('base64url')}`;
+    if (Buffer.isBuffer(value))
+      return `${xjson_Buffer}${value.toString('base64url')}`;
     return value;
   }, 2);
 }
