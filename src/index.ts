@@ -33,6 +33,7 @@ function stringify(value: any) {
       return `${xjson_BigInt}${value.toString()}`;
     if (Buffer.isBuffer(value))
       return `${xjson_Buffer}${value.toString('base64url')}`;
+    if (protoType === '[object Function]') return value.toString();
     return value;
   }, 2);
 }
@@ -115,5 +116,10 @@ function hello() {
   console.log(b);
   const c = _XJSON.parse(b);
   console.log(c);
+  const kka = () => {
+    const a = 1+2;
+    return 'sdf' + a;
+  };
+  console.log(kka.toString());
   // console.log(bint.toString());
 }
