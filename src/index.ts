@@ -102,7 +102,7 @@ function hello() {
     k: undefined,
     c: Buffer.from('1234', 'utf8'),
     d: {
-      p: Buffer.from('0000', 'utf8'),
+      p: Buffer.from('0000你好，世界我的宝宝！！！😄', 'utf8'),
     },
     i: new Date(),
     pp: Symbol(''),
