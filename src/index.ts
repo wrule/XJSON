@@ -16,12 +16,10 @@ function stringify(value: any) {
   return JSON.stringify(value, function (key) {
     value = this[key];
     const protoType = Object.prototype.toString.call(value);
-    
     if (protoType === '[object Object]' || protoType === '[object Array]') {
       if (cache.has(value)) return xjson_Circular;
       else cache.add(value);
     }
-
     if (value === undefined) return xjson_undefined;
     if (value === Infinity) return xjson_Infinity;
     if (value === -Infinity) return xjson_NInfinity;
