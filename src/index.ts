@@ -39,6 +39,16 @@ function stringify(value: any) {
 }
 
 export
+function traverse(value: any, map: (item: any) => any) {
+  const protoType = Object.prototype.toString.call(value);
+  if (protoType === '[object Object]')
+    Object.keys(value).forEach((key) => value[key] = replace(value[key]));
+  if (protoType === '[object Array]')
+    (value as any[]).forEach((item, index) => value[index] = replace(item));
+  return map(value);
+}
+
+export
 function replace(value: any) {
   const protoType = Object.prototype.toString.call(value);
   if (protoType === '[object Object]')
