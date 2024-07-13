@@ -7,6 +7,7 @@ export const xjson_NInfinity = `${magicNum}NInfinity`;
 export const xjson_NaN = `${magicNum}NaN`;
 export const xjson_Date = `${magicNum}Date-`;
 export const xjson_Symbol = `${magicNum}Symbol`;
+export const xjson_BigInt = `${magicNum}BigInt-`;
 export const xjson_Buffer = `${magicNum}Buffer-`;
 export const xjson_Circular = `${magicNum}Circular`;
 
@@ -28,6 +29,8 @@ function stringify(value: any) {
       return `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
     if (protoType === '[object Symbol]')
       return `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
+    if (protoType === '[object BigInt]')
+      return `${xjson_BigInt}${value.toString()}`;
     if (Buffer.isBuffer(value))
       return `${xjson_Buffer}${value.toString('base64url')}`;
     return value;
@@ -86,7 +89,9 @@ function hello() {
   const sub: any = {
     text: '1234',
   };
+  const bint2: bigint = 1213423423425997282836534328291837374394412345n;
   const a: any = {
+    bint2,
     a: 1,
     oo: Infinity,
     op: -Infinity,
@@ -108,6 +113,5 @@ function hello() {
   console.log(b);
   const c = _XJSON.parse(b);
   console.log(c);
-  // const aaa = Symbol('');
-  // console.log(aaa.description);
+  // console.log(bint.toString());
 }
