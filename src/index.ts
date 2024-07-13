@@ -57,7 +57,7 @@ export default _XJSON;
 
 export
 function hello() {
-  const a = {
+  const a: any = {
     a: 1,
     oo: Infinity,
     op: -Infinity,
@@ -69,6 +69,7 @@ function hello() {
     },
     i: new Date(),
   };
+  a.loop = a;
   console.log(a);
   const b = _XJSON.stringify(a);
   console.log(b);
