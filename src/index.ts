@@ -32,7 +32,7 @@ function stringify(value: any) {
     if (protoType === '[object BigInt]')
       return `${xjson_BigInt}${value.toString()}`;
     if (Buffer.isBuffer(value))
-      return `${xjson_Buffer}${value.toString('base64url')}`;
+      return `${xjson_Buffer}${value.toString('base64')}`;
     if (protoType === '[object Function]') return value.toString();
     return value;
   }, 2);
@@ -67,7 +67,7 @@ function parse(text: string) {
       if (value.startsWith(xjson_BigInt))
         return BigInt(value.slice(xjson_BigInt.length));
       if (value.startsWith(xjson_Buffer))
-        return Buffer.from(value.slice(xjson_Buffer.length), 'base64url');
+        return Buffer.from(value.slice(xjson_Buffer.length), 'base64');
     }
     return value;
   }));
