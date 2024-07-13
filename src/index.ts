@@ -12,7 +12,10 @@ export const xjson_Buffer = `${magicNum}Buffer-@data:application/octet-stream;ba
 export const xjson_Circular = `${magicNum}Circular`;
 
 export
-function stringify(value: any) {
+function stringify(
+  value: any,
+  replacer?: (key: string, value: any) => any,
+) {
   const cache = new WeakSet<any>();
   return JSON.stringify(value, function (key) {
     value = this[key];
