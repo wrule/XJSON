@@ -63,6 +63,8 @@ function parse(text: string) {
         if (description.startsWith('-')) return Symbol(description.slice(1));
         else return Symbol();
       }
+      if (value.startsWith(xjson_BigInt))
+        return BigInt(value.slice(xjson_BigInt.length));
       if (value.startsWith(xjson_Buffer))
         return Buffer.from(value.slice(xjson_Buffer.length), 'base64url');
     }
