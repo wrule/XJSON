@@ -6,6 +6,7 @@ export const xjson_Infinity = `${magicNum}Infinity`;
 export const xjson_NInfinity = `${magicNum}NInfinity`;
 export const xjson_NaN = `${magicNum}NaN`;
 export const xjson_Date = `${magicNum}Date-`;
+export const xjson_Symbol = `${magicNum}Symbol`;
 export const xjson_Buffer = `${magicNum}Buffer-`;
 export const xjson_Circular = `${magicNum}Circular`;
 
@@ -27,6 +28,8 @@ function stringify(value: any) {
     if (Number.isNaN(value)) return xjson_NaN;
     if (protoType === '[object Date]')
       return `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
+    if (protoType === '[object Symbol]')
+      return `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
     if (Buffer.isBuffer(value))
       return `${xjson_Buffer}${value.toString('base64url')}`;
     return value;
@@ -54,6 +57,10 @@ function parse(text: string) {
       if (value === xjson_NaN) return NaN;
       if (value.startsWith(xjson_Date))
         return dayjs(value.slice(xjson_Date.length)).toDate();
+      if (value.startsWith(xjson_Symbol)) {
+        const description = value.slice(xjson_Symbol.length);
+        return Symbol(description || undefined);
+      }
       if (value.startsWith(xjson_Buffer))
         return Buffer.from(value.slice(xjson_Buffer.length), 'base64url');
     }
@@ -88,6 +95,7 @@ function hello() {
       p: Buffer.from('0000', 'utf8'),
     },
     i: new Date(),
+    pp: Symbol(),
   };
   a.loop = a;
   console.log(a);
@@ -95,4 +103,6 @@ function hello() {
   console.log(b);
   const c = _XJSON.parse(b);
   console.log(c);
+  const aaa = Symbol('');
+  console.log(aaa.description);
 }
