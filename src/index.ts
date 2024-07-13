@@ -19,25 +19,27 @@ function stringify(
   const cache = new WeakSet<any>();
   return JSON.stringify(value, function (key) {
     value = this[key];
+    let result = value;
     const protoType = Object.prototype.toString.call(value);
     if (protoType === '[object Object]' || protoType === '[object Array]') {
-      if (cache.has(value)) return xjson_Circular;
+      if (cache.has(value)) result = xjson_Circular;
       else cache.add(value);
     }
-    if (value === undefined) return xjson_undefined;
-    if (value === Infinity) return xjson_Infinity;
-    if (value === -Infinity) return xjson_NInfinity;
-    if (Number.isNaN(value)) return xjson_NaN;
+    if (value === undefined) result = xjson_undefined;
+    if (value === Infinity) result = xjson_Infinity;
+    if (value === -Infinity) result = xjson_NInfinity;
+    if (Number.isNaN(value)) result = xjson_NaN;
     if (protoType === '[object Date]')
-      return `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
+      result = `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
     if (protoType === '[object Symbol]')
-      return `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
+      result = `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
     if (protoType === '[object BigInt]')
-      return `${xjson_BigInt}${value.toString()}`;
+      result = `${xjson_BigInt}${value.toString()}`;
     if (Buffer.isBuffer(value))
-      return `${xjson_Buffer}${value.toString('base64')}`;
-    if (protoType === '[object Function]') return value.toString();
-    return value;
+      result = `${xjson_Buffer}${value.toString('base64')}`;
+    if (protoType === '[object Function]')
+      result = value.toString();
+    return replacer ? replacer(key, result) : result;
   }, 2);
 }
 
