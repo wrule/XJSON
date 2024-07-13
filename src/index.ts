@@ -31,7 +31,7 @@ function parse(json: string) {
       if (value === xjson_NInfinity) return -Infinity;
       if (value === xjson_NaN) return NaN;
       if (value.startsWith(xjson_Buffer))
-        return Buffer.from(value.replace(xjson_Buffer, ''), 'base64url');
+        return Buffer.from(value.slice(xjson_Buffer.length), 'base64url');
     }
     return value;
   });
