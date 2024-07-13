@@ -87,8 +87,11 @@ function parse(text: string) {
 
 export
 class _XJSON {
-  public stringify(value: any) {
-    return stringify(value);
+  public stringify(
+    value: any,
+    replacer?: (key: string, value: any) => any,
+  ) {
+    return stringify(value, replacer);
   }
 
   public parse(text: string) {
