@@ -83,6 +83,9 @@ export default _XJSON;
 
 export
 function hello() {
+  const sub: any = {
+    text: '1234',
+  };
   const a: any = {
     a: 1,
     oo: Infinity,
@@ -97,6 +100,9 @@ function hello() {
     pp: Symbol(''),
   };
   a.loop = a;
+  sub.a = a.d;
+  sub.kk = a;
+  a.sub = sub;
   console.log(a);
   const b = _XJSON.stringify(a);
   console.log(b);
