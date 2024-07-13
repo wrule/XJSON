@@ -50,13 +50,10 @@ function traverse(value: any, map: (item: any) => any) {
 
 export
 function replace(value: any) {
-  const protoType = Object.prototype.toString.call(value);
-  if (protoType === '[object Object]')
-    Object.keys(value).forEach((key) => value[key] = replace(value[key]));
-  if (protoType === '[object Array]')
-    (value as any[]).forEach((item, index) => value[index] = replace(item));
-  if (value === xjson_undefined) return undefined;
-  return value;
+  return traverse(value, (item) => {
+    if (item === xjson_undefined) return undefined;
+    return item;
+  });
 }
 
 export
