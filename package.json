@@ -1,5 +1,5 @@
 {
-  "name": "XJSON",
+  "name": "@wrule/XJSON",
   "version": "0.1.0",
   "main": "dist/index.js",
   "scripts": {
