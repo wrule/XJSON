@@ -42,9 +42,9 @@ export
 function traverse(value: any, map: (item: any) => any) {
   const protoType = Object.prototype.toString.call(value);
   if (protoType === '[object Object]')
-    Object.keys(value).forEach((key) => value[key] = replace(value[key]));
+    Object.keys(value).forEach((key) => value[key] = traverse(value[key], map));
   if (protoType === '[object Array]')
-    (value as any[]).forEach((item, index) => value[index] = replace(item));
+    (value as any[]).forEach((item, index) => value[index] = traverse(item, map));
   return map(value);
 }
 
