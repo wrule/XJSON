@@ -8,7 +8,7 @@ export const xjson_NaN = `${magicNum}NaN`;
 export const xjson_Date = `${magicNum}Date-`;
 export const xjson_Symbol = `${magicNum}Symbol`;
 export const xjson_BigInt = `${magicNum}BigInt-`;
-export const xjson_Buffer = `${magicNum}Buffer-`;
+export const xjson_Buffer = `${magicNum}Buffer-@data:application/octet-stream;base64,`;
 export const xjson_Circular = `${magicNum}Circular`;
 
 export
