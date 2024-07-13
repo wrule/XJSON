@@ -25,8 +25,8 @@ function stringify(value: any) {
 }
 
 export
-function parse(json: string) {
-  return JSON.parse(json, function (key, value) {
+function parse(text: string) {
+  return JSON.parse(text, function (_, value) {
     if (typeof value === 'string' && value.startsWith(magicNum)) {
       if (value === xjson_undefined) return xjson_undefined;
       if (value === xjson_Infinity) return Infinity;
@@ -42,9 +42,22 @@ function parse(json: string) {
 }
 
 export
+class XJSON {
+  public stringify(value: any) {
+    return stringify(value);
+  }
+
+  public parse(text: string) {
+    return parse(text);
+  }
+}
+
+const _XJSON = new XJSON();
+export default _XJSON;
+
+export
 function hello() {
-  JSON.parse
-  console.log(parse(stringify({
+  const a = {
     a: 1,
     oo: Infinity,
     op: -Infinity,
@@ -52,10 +65,13 @@ function hello() {
     k: undefined,
     c: Buffer.from('1234', 'utf8'),
     d: {
-      p: Buffer.from('1234', 'utf8'),
+      p: Buffer.from('0000', 'utf8'),
     },
     i: new Date(),
-  })));
-
-  console.log(Object.prototype.toString.call(new Date()));
+  };
+  console.log(a);
+  const b = _XJSON.stringify(a);
+  console.log(b);
+  const c = _XJSON.parse(b);
+  console.log(c);
 }
