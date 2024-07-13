@@ -7,16 +7,25 @@ export const xjson_NInfinity = `${magicNum}NInfinity`;
 export const xjson_NaN = `${magicNum}NaN`;
 export const xjson_Date = `${magicNum}Date-`;
 export const xjson_Buffer = `${magicNum}Buffer-`;
+export const xjson_Circular = `${magicNum}Circular`;
 
 export
 function stringify(value: any) {
+  const cache = new WeakSet<any>();
   return JSON.stringify(value, function (key) {
     value = this[key];
+    const protoType = Object.prototype.toString.call(value);
+    
+    if (protoType === '[object Object]' || protoType === '[object Array]') {
+      if (cache.has(value)) return xjson_Circular;
+      else cache.add(value);
+    }
+
     if (value === undefined) return xjson_undefined;
     if (value === Infinity) return xjson_Infinity;
     if (value === -Infinity) return xjson_NInfinity;
     if (Number.isNaN(value)) return xjson_NaN;
-    if (Object.prototype.toString.call(value) === '[object Date]')
+    if (protoType === '[object Date]')
       return `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
     if (Buffer.isBuffer(value))
       return `${xjson_Buffer}${value.toString('base64url')}`;
