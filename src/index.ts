@@ -117,9 +117,9 @@ function hello() {
   sub.kk = a;
   a.sub = sub;
   console.log(a);
-  const b = _XJSON.stringify(a);
+  const b = XJSON.stringify(a);
   console.log(b);
-  const c = _XJSON.parse(b);
+  const c = XJSON.parse(b);
   console.log(c);
 
   // console.log(kka.toString());
