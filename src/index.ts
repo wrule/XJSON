@@ -27,7 +27,7 @@ function stringify(value: any) {
 export
 function parse(json: string) {
   return JSON.parse(json, function (key, value) {
-    if (typeof  value === 'string' && value.startsWith(magicNum)) {
+    if (typeof value === 'string' && value.startsWith(magicNum)) {
       if (value === xjson_undefined) return xjson_undefined;
       if (value === xjson_Infinity) return Infinity;
       if (value === xjson_NInfinity) return -Infinity;
