@@ -74,7 +74,7 @@ function parse(text: string) {
 }
 
 export
-class XJSON {
+class _XJSON {
   public stringify(value: any) {
     return stringify(value);
   }
@@ -84,8 +84,8 @@ class XJSON {
   }
 }
 
-const _XJSON = new XJSON();
-export default _XJSON;
+const XJSON = new _XJSON();
+export default XJSON;
 
 export
 function hello() {
