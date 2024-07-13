@@ -15,6 +15,7 @@ function stringify(value: any) {
     if (value === undefined) return xjson_undefined;
     if (value === Infinity) return xjson_Infinity;
     if (value === -Infinity) return xjson_NInfinity;
+    if (Number.isNaN(value)) return xjson_NaN;
     if (Buffer.isBuffer(value)) return `${xjson_Buffer}${value.toString('base64url')}`;
     return value;
   }, 2);
@@ -27,6 +28,7 @@ function parse(json: string) {
       if (value === xjson_undefined) return xjson_undefined;
       if (value === xjson_Infinity) return Infinity;
       if (value === xjson_NInfinity) return -Infinity;
+      if (value === xjson_NaN) return NaN;
       if (value.startsWith(xjson_Buffer))
         return Buffer.from(value.replace(xjson_Buffer, ''), 'base64url');
     }
@@ -48,5 +50,6 @@ function hello() {
       p: Buffer.from('1234', 'utf8'),
     },
   })));
-  console.log(isNaN({}));
+  
+  console.log(Number.isNaN({ }));
 }
