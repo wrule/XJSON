@@ -1,9 +1,11 @@
+import dayjs from 'dayjs';
 
 export const magicNum = 'xjson-28df8c4d-';
 export const xjson_undefined = `${magicNum}undefined`;
 export const xjson_Infinity = `${magicNum}Infinity`;
 export const xjson_NInfinity = `${magicNum}NInfinity`;
 export const xjson_NaN = `${magicNum}NaN`;
+export const xjson_Date = `${magicNum}Date-`;
 export const xjson_Buffer = `${magicNum}Buffer-`;
 import util from 'util';
 
@@ -16,6 +18,8 @@ function stringify(value: any) {
     if (value === Infinity) return xjson_Infinity;
     if (value === -Infinity) return xjson_NInfinity;
     if (Number.isNaN(value)) return xjson_NaN;
+    if (Object.prototype.toString.call(value) === '[object Date]')
+      return `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
     if (Buffer.isBuffer(value))
       return `${xjson_Buffer}${value.toString('base64url')}`;
     return value;
@@ -30,6 +34,8 @@ function parse(json: string) {
       if (value === xjson_Infinity) return Infinity;
       if (value === xjson_NInfinity) return -Infinity;
       if (value === xjson_NaN) return NaN;
+      if (value.startsWith(xjson_Date))
+        return dayjs(value.slice(xjson_Date.length)).toDate();
       if (value.startsWith(xjson_Buffer))
         return Buffer.from(value.slice(xjson_Buffer.length), 'base64url');
     }
@@ -50,7 +56,8 @@ function hello() {
     d: {
       p: Buffer.from('1234', 'utf8'),
     },
+    i: new Date(),
   })));
-  
-  console.log(Number.isNaN({ }));
+
+  console.log(Object.prototype.toString.call(new Date()));
 }
