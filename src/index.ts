@@ -132,7 +132,15 @@ function hello() {
   sub.kk = a;
   a.sub = sub;
   console.log(a);
-  const b = XJSON.stringify(a);
+  const b = XJSON.stringify(a, (_, value) => {
+    if (typeof value === 'string') {
+      if (value.length > 100) {
+        console.log(value);
+        return 'xxxxxx';
+      }
+    }
+    return value;
+  });
   console.log(b);
   const c = XJSON.parse(b);
   console.log(c);
