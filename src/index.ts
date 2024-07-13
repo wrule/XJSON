@@ -109,6 +109,11 @@ function hello() {
   };
   a.loop = a;
   sub.a = a.d;
+  const kka = () => {
+    const a = 1+2;
+    return 'sdf' + a;
+  };
+  a.func = kka;
   sub.kk = a;
   a.sub = sub;
   console.log(a);
@@ -116,10 +121,7 @@ function hello() {
   console.log(b);
   const c = _XJSON.parse(b);
   console.log(c);
-  const kka = () => {
-    const a = 1+2;
-    return 'sdf' + a;
-  };
-  console.log(kka.toString());
+
+  // console.log(kka.toString());
   // console.log(bint.toString());
 }
