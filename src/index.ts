@@ -59,7 +59,8 @@ function parse(text: string) {
         return dayjs(value.slice(xjson_Date.length)).toDate();
       if (value.startsWith(xjson_Symbol)) {
         const description = value.slice(xjson_Symbol.length);
-        return Symbol(description || undefined);
+        if (description.startsWith('-')) return Symbol(description.slice(1));
+        else return Symbol();
       }
       if (value.startsWith(xjson_Buffer))
         return Buffer.from(value.slice(xjson_Buffer.length), 'base64url');
@@ -95,7 +96,7 @@ function hello() {
       p: Buffer.from('0000', 'utf8'),
     },
     i: new Date(),
-    pp: Symbol(),
+    pp: Symbol(''),
   };
   a.loop = a;
   console.log(a);
@@ -103,6 +104,6 @@ function hello() {
   console.log(b);
   const c = _XJSON.parse(b);
   console.log(c);
-  const aaa = Symbol('');
-  console.log(aaa.description);
+  // const aaa = Symbol('');
+  // console.log(aaa.description);
 }
