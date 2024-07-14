@@ -49,7 +49,27 @@ JSON.xjson = (
 };
 
 export
-function mapping_de(value: any) {
+function mapping_forward(value: any) {
+  const protoType = Object.prototype.toString.call(value);
+  if (value === undefined) return xjson_undefined;
+  if (value === Infinity) return xjson_Infinity;
+  if (value === -Infinity) return xjson_NInfinity;
+  if (Number.isNaN(value)) return xjson_NaN;
+  if (protoType === '[object Date]')
+    return `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
+  if (protoType === '[object Symbol]')
+    return `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
+  if (protoType === '[object BigInt]')
+    return `${xjson_BigInt}${value.toString()}`;
+  if (Buffer.isBuffer(value))
+    return `${xjson_Buffer}${value.toString('base64')}`;
+  if (protoType === '[object Function]')
+    return value.toString();
+  return value;
+}
+
+export
+function mapping_reverse(value: any) {
   if (typeof value === 'string' && value.startsWith(magicNum)) {
     if (value === xjson_undefined) return undefined;
     if (value === xjson_Infinity) return Infinity;
