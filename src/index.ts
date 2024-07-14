@@ -15,14 +15,12 @@ export const xjson_Circular = `${magicNum}Circular`;
 
 export
 function traverse(value: any, map: (item: any) => any) {
-  function _traverse(value: any, map: (item: any) => any) {
-    const protoType = Object.prototype.toString.call(value);
-    if (protoType === '[object Object]')
-      Object.keys(value).forEach((key) => value[key] = traverse(value[key], map));
-    if (protoType === '[object Array]')
-      (value as any[]).forEach((item, index) => value[index] = traverse(item, map));
-    return map(value);
-  }
+  const protoType = Object.prototype.toString.call(value);
+  if (protoType === '[object Object]')
+    Object.keys(value).forEach((key) => value[key] = traverse(value[key], map));
+  if (protoType === '[object Array]')
+    (value as any[]).forEach((item, index) => value[index] = traverse(item, map));
+  return map(value);
 }
 
 JSON.xjson = (
@@ -48,6 +46,16 @@ JSON.xjson = (
       result = value.toString();
     return replacer ? replacer(result) : result;
   });
+};
+
+JSON.xjson_de = (value: any) => {
+  const protoType = Object.prototype.toString.call(value);
+  if (protoType === '[object Object]' || protoType === '[object Array]') {
+    if (!value[xjson_decycle]) return value;
+    const result = JSON.xjson(value);
+    return result;
+  }
+  return value;
 };
 
 JSON.xstringify = (...args) => {
