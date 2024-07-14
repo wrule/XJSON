@@ -14,38 +14,6 @@ export const xjson_Buffer = `${magicNum}Buffer-@data:application/octet-stream;ba
 export const xjson_Circular = `${magicNum}Circular`;
 
 export
-function stringify(
-  value: any,
-  replacer?: (key: string, value: any) => any,
-) {
-  const cache = new WeakSet<any>();
-  return JSON.stringify(value, function (key) {
-    value = this[key];
-    let result = value;
-    const protoType = Object.prototype.toString.call(value);
-    if (protoType === '[object Object]' || protoType === '[object Array]') {
-      if (cache.has(value)) result = xjson_Circular;
-      else cache.add(value);
-    }
-    if (value === undefined) result = xjson_undefined;
-    if (value === Infinity) result = xjson_Infinity;
-    if (value === -Infinity) result = xjson_NInfinity;
-    if (Number.isNaN(value)) result = xjson_NaN;
-    if (protoType === '[object Date]')
-      result = `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
-    if (protoType === '[object Symbol]')
-      result = `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
-    if (protoType === '[object BigInt]')
-      result = `${xjson_BigInt}${value.toString()}`;
-    if (Buffer.isBuffer(value))
-      result = `${xjson_Buffer}${value.toString('base64')}`;
-    if (protoType === '[object Function]')
-      result = value.toString();
-    return replacer ? replacer(key, result) : result;
-  }, 2);
-}
-
-export
 function traverse(value: any, map: (item: any) => any) {
   function _traverse(value: any, map: (item: any) => any) {
     const protoType = Object.prototype.toString.call(value);
@@ -85,37 +53,6 @@ JSON.xjson = (
 JSON.xstringify = (...args) => {
   return JSON.stringify(JSON.xjson(args[0]), args[1], args[2] ?? 2);
 };
-
-export
-function xjsonization(
-  object: any,
-  replacer?: (value: any) => any,
-) {
-  const cache = new WeakSet<any>();
-  return traverse(object, (value) => {
-    let result = value;
-    const protoType = Object.prototype.toString.call(value);
-    if (protoType === '[object Object]' || protoType === '[object Array]') {
-      if (cache.has(value)) result = xjson_Circular;
-      else cache.add(value);
-    }
-    if (value === undefined) result = xjson_undefined;
-    if (value === Infinity) result = xjson_Infinity;
-    if (value === -Infinity) result = xjson_NInfinity;
-    if (Number.isNaN(value)) result = xjson_NaN;
-    if (protoType === '[object Date]')
-      result = `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
-    if (protoType === '[object Symbol]')
-      result = `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
-    if (protoType === '[object BigInt]')
-      result = `${xjson_BigInt}${value.toString()}`;
-    if (Buffer.isBuffer(value))
-      result = `${xjson_Buffer}${value.toString('base64')}`;
-    if (protoType === '[object Function]')
-      result = value.toString();
-    return replacer ? replacer(result) : result;
-  });
-}
 
 export
 function replace(value: any) {
