@@ -7,8 +7,9 @@ _JSON._decycle = JSON.decycle;
 JSON.decycle = (value: any, replacer?: (value: any) => any) => {
   const prototype = Object.prototype.toString.call(value);
   if (prototype === '[object Object]' || prototype === '[object Array]') {
-    const result = _JSON._decycle(value, replacer);
-    result[xjson_decycle] = true;
+    let result = _JSON._decycle(value, replacer);
+    if (prototype === '[object Array]') result = { result };
+    result[xjson_decycle] = prototype;
     return result;
   }
   return replacer ? replacer(value) : value;
