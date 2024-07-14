@@ -139,8 +139,8 @@ export default XJSON;
 
 export
 function hello() {
-  let a: any[] = [1, 2, 3, Buffer.from('1234', 'utf8')];
-  a[4] = a;
+  let a: any[] = [1, 2, 3, NaN, new Date(), Symbol('sssd'), Buffer.from('1234', 'utf8')];
+  a[10] = a;
   // const a: any = { a: 1, b: 123 };
   // a.c = a;
   // a.d.e.y = a.d;
@@ -149,10 +149,14 @@ function hello() {
   // console.log(b);
   // console.log(b.d.e.y);
   console.log(a);
-  const c = JSON.decycle(JSON.decycle(a));
+  const c = JSON.decycle(JSON.decycle(a), (value) => {
+    console.log(1111, value);
+    return value;
+  });
   const d = JSON.retrocycle(JSON.retrocycle(c));
   // const c = JSON.retrocycle(JSON.retrocycle(JSON.retrocycle(a)));
   console.log(d);
+  console.log(Object.prototype.toString.call(Buffer.from('234', 'utf8')));
   // console.log(JSON.decycle(2));
   // console.log(JSON.retrocycle(3));
 
