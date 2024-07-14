@@ -5,6 +5,7 @@ declare global {
     retrocycle(value: any): any;
     xjson(value: any): any;
     xstringify(...args: Parameters<typeof JSON.stringify>);
+    xparse(...args: Parameters<typeof JSON.parse>);
   }
 }
 
