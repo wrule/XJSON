@@ -4,10 +4,10 @@ import { xjson_decycle } from '../index';
 const _JSON: any = JSON;
 
 _JSON._decycle = JSON.decycle;
-JSON.decycle = (value: any) => {
+JSON.decycle = (value: any, replacer?: (value: any) => any) => {
   const protoType = Object.prototype.toString.call(value);
   if (protoType === '[object Object]' || protoType === '[object Array]') {
-    const result = _JSON._decycle(value);
+    const result = _JSON._decycle(value, replacer);
     result[xjson_decycle] = true;
     return result;
   }
