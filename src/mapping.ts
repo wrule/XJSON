@@ -52,3 +52,13 @@ function mapping_reverse(value: any) {
   }
   return value;
 }
+
+export
+function traverse(object: any, mapping: (value: any) => any) {
+  const protoType = Object.prototype.toString.call(object);
+  if (protoType === '[object Object]')
+    Object.keys(object).forEach((key) => object[key] = traverse(object[key], mapping));
+  if (protoType === '[object Array]')
+    (object as any[]).forEach((item, index) => object[index] = traverse(item, mapping));
+  return mapping(object);
+}
