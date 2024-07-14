@@ -1,5 +1,7 @@
 import './JSON-js/cycle_ext';
 import { mapping_forward, mapping_reverse, traverse, xjson_decycle } from './mapping';
+export * from './mapping';
+export * from './JSON-js/cycle_ext';
 
 declare global {
   interface JSON {
