@@ -2,6 +2,7 @@
   "name": "@wrule/xjson",
   "version": "0.2.0",
   "main": "dist/index.js",
+  "types": "src/global.d.ts",
   "scripts": {
     "build": "tsc",
     "pack": "script/pack.sh",
