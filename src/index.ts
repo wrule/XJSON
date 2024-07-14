@@ -57,7 +57,10 @@ function traverse(value: any, map: (item: any) => any) {
   }
 }
 
-JSON.xjson = (object: any) => {
+JSON.xjson = (
+  object: any,
+  replacer?: (value: any) => any,
+) => {
   return JSON.decycle(object, (value) => {
     let result = value;
     const protoType = Object.prototype.toString.call(value);
@@ -75,7 +78,7 @@ JSON.xjson = (object: any) => {
       result = `${xjson_Buffer}${value.toString('base64')}`;
     if (protoType === '[object Function]')
       result = value.toString();
-    return result;
+    return replacer ? replacer(result) : result;
   });
 };
 
