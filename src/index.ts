@@ -54,7 +54,10 @@ function traverse(value: any, map: (item: any) => any) {
 }
 
 export
-function xjsonization(object: any) {
+function xjsonization(
+  object: any,
+  replacer?: (value: any) => any,
+) {
   const cache = new WeakSet<any>();
   return traverse(object, (value) => {
     let result = value;
@@ -77,7 +80,7 @@ function xjsonization(object: any) {
       result = `${xjson_Buffer}${value.toString('base64')}`;
     if (protoType === '[object Function]')
       result = value.toString();
-    return result;
+    return replacer ? replacer(result) : result;
   });
 }
 
