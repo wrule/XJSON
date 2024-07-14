@@ -54,7 +54,7 @@ function traverse(value: any, map: (item: any) => any) {
 }
 
 export
-function xjson(value: any) {
+function xjsonization(value: any) {
   const cache = new WeakSet<any>();
   return traverse(value, (item) => {
     value = item;
