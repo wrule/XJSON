@@ -48,27 +48,40 @@ JSON.xjson = (
   });
 };
 
-JSON.xjson_de = (value: any) => {
-  const protoType = Object.prototype.toString.call(value);
-  if (protoType === '[object Object]' || protoType === '[object Array]') {
-    if (!value[xjson_decycle]) return value;
-    const result = JSON.xjson(value);
-    return result;
+export
+function mapping_de(value: any) {
+  if (typeof value === 'string' && value.startsWith(magicNum)) {
+    if (value === xjson_undefined) return undefined;
+    if (value === xjson_Infinity) return Infinity;
+    if (value === xjson_NInfinity) return -Infinity;
+    if (value === xjson_NaN) return NaN;
+    if (value.startsWith(xjson_Date))
+      return dayjs(value.slice(xjson_Date.length)).toDate();
+    if (value.startsWith(xjson_Symbol)) {
+      const description = value.slice(xjson_Symbol.length);
+      if (description.startsWith('-')) return Symbol(description.slice(1));
+      else return Symbol();
+    }
+    if (value.startsWith(xjson_BigInt))
+      return BigInt(value.slice(xjson_BigInt.length));
+    if (value.startsWith(xjson_Buffer))
+      return Buffer.from(value.slice(xjson_Buffer.length), 'base64');
   }
   return value;
+}
+
+JSON.xjson_de = (object: any) => {
+  const protoType = Object.prototype.toString.call(object);
+  if (protoType === '[object Object]' || protoType === '[object Array]') {
+    if (!object[xjson_decycle]) return object;
+    return JSON.retrocycle(traverse(object, mapping_de));
+  }
+  return traverse(object, mapping_de);
 };
 
 JSON.xstringify = (...args) => {
   return JSON.stringify(JSON.xjson(args[0]), args[1], args[2] ?? 2);
 };
-
-export
-function replace(value: any) {
-  return traverse(value, (item) => {
-    if (item === xjson_undefined) return undefined;
-    return item;
-  });
-}
 
 export
 function parse(text: string) {
