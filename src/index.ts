@@ -54,6 +54,35 @@ function traverse(value: any, map: (item: any) => any) {
 }
 
 export
+function xjson(value: any) {
+  const cache = new WeakSet<any>();
+  return traverse(value, (item) => {
+    value = item;
+    let result = value;
+    const protoType = Object.prototype.toString.call(value);
+    if (protoType === '[object Object]' || protoType === '[object Array]') {
+      if (cache.has(value)) result = xjson_Circular;
+      else cache.add(value);
+    }
+    if (value === undefined) result = xjson_undefined;
+    if (value === Infinity) result = xjson_Infinity;
+    if (value === -Infinity) result = xjson_NInfinity;
+    if (Number.isNaN(value)) result = xjson_NaN;
+    if (protoType === '[object Date]')
+      result = `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
+    if (protoType === '[object Symbol]')
+      result = `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
+    if (protoType === '[object BigInt]')
+      result = `${xjson_BigInt}${value.toString()}`;
+    if (Buffer.isBuffer(value))
+      result = `${xjson_Buffer}${value.toString('base64')}`;
+    if (protoType === '[object Function]')
+      result = value.toString();
+    return result;
+  });
+}
+
+export
 function replace(value: any) {
   return traverse(value, (item) => {
     if (item === xjson_undefined) return undefined;
