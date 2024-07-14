@@ -11,7 +11,7 @@ JSON.decycle = (value: any, replacer?: (value: any) => any) => {
     result[xjson_decycle] = true;
     return result;
   }
-  return value;
+  return replacer ? replacer(value) : value;
 };
 
 _JSON._retrocycle = JSON.retrocycle;
