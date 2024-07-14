@@ -11,7 +11,7 @@ JSON.xjson = (object: any, replacer?: (value: any) => any) => {
 JSON.xjson_de = (object: any, replacer?: (value: any) => any) => {
   const prototype = Object.prototype.toString.call(object);
   if (prototype === '[object Object]' || prototype === '[object Array]') {
-    if (!object[xjson_decycle]) return object;
+    if (!object[xjson_decycle]) throw 'not a xjson object';
     return JSON.retrocycle(traverse(object, (value) => {
       const result = mapping_reverse(value);
       return replacer ? replacer(result) : result;
