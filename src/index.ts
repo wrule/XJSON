@@ -1,26 +1,9 @@
 import './JSON-js/cycle_ext';
+import { mapping_forward } from './mapping';
 
-JSON.xjson = (
-  object: any,
-  replacer?: (value: any) => any,
-) => {
+JSON.xjson = (object: any, replacer?: (value: any) => any) => {
   return JSON.decycle(object, (value) => {
-    let result = value;
-    const protoType = Object.prototype.toString.call(value);
-    if (value === undefined) result = xjson_undefined;
-    if (value === Infinity) result = xjson_Infinity;
-    if (value === -Infinity) result = xjson_NInfinity;
-    if (Number.isNaN(value)) result = xjson_NaN;
-    if (protoType === '[object Date]')
-      result = `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
-    if (protoType === '[object Symbol]')
-      result = `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
-    if (protoType === '[object BigInt]')
-      result = `${xjson_BigInt}${value.toString()}`;
-    if (Buffer.isBuffer(value))
-      result = `${xjson_Buffer}${value.toString('base64')}`;
-    if (protoType === '[object Function]')
-      result = value.toString();
+    const result = mapping_forward(value);
     return replacer ? replacer(result) : result;
   });
 };
