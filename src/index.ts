@@ -29,5 +29,5 @@ export
 function hello() {
   let a: any[] = [1, 2, 3, NaN, new Date(), Symbol('sssd'), Buffer.from('1234', 'utf8')];
   a[10] = a;
-  console.log(JSON.xjson(a));
+  console.log(JSON.xjson_de(JSON.xjson(a)));
 }
