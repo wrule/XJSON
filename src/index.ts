@@ -1,27 +1,4 @@
 import './JSON-js/cycle_ext';
-import dayjs from 'dayjs';
-
-export const magicNum = 'xjson-28df8c4d-';
-export const xjson_decycle = `${magicNum}decycle`;
-export const xjson_undefined = `${magicNum}undefined`;
-export const xjson_Infinity = `${magicNum}Infinity`;
-export const xjson_NInfinity = `${magicNum}NInfinity`;
-export const xjson_NaN = `${magicNum}NaN`;
-export const xjson_Date = `${magicNum}Date-`;
-export const xjson_Symbol = `${magicNum}Symbol`;
-export const xjson_BigInt = `${magicNum}BigInt-`;
-export const xjson_Buffer = `${magicNum}Buffer-@data:application/octet-stream;base64,`;
-export const xjson_Circular = `${magicNum}Circular`;
-
-export
-function traverse(value: any, map: (item: any) => any) {
-  const protoType = Object.prototype.toString.call(value);
-  if (protoType === '[object Object]')
-    Object.keys(value).forEach((key) => value[key] = traverse(value[key], map));
-  if (protoType === '[object Array]')
-    (value as any[]).forEach((item, index) => value[index] = traverse(item, map));
-  return map(value);
-}
 
 JSON.xjson = (
   object: any,
@@ -48,48 +25,6 @@ JSON.xjson = (
   });
 };
 
-export
-function mapping_forward(value: any) {
-  const protoType = Object.prototype.toString.call(value);
-  if (value === undefined) return xjson_undefined;
-  if (value === Infinity) return xjson_Infinity;
-  if (value === -Infinity) return xjson_NInfinity;
-  if (Number.isNaN(value)) return xjson_NaN;
-  if (protoType === '[object Date]')
-    return `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
-  if (protoType === '[object Symbol]')
-    return `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
-  if (protoType === '[object BigInt]')
-    return `${xjson_BigInt}${value.toString()}`;
-  if (Buffer.isBuffer(value))
-    return `${xjson_Buffer}${value.toString('base64')}`;
-  if (protoType === '[object Function]')
-    return value.toString();
-  return value;
-}
-
-export
-function mapping_reverse(value: any) {
-  if (typeof value === 'string' && value.startsWith(magicNum)) {
-    if (value === xjson_undefined) return undefined;
-    if (value === xjson_Infinity) return Infinity;
-    if (value === xjson_NInfinity) return -Infinity;
-    if (value === xjson_NaN) return NaN;
-    if (value.startsWith(xjson_Date))
-      return dayjs(value.slice(xjson_Date.length)).toDate();
-    if (value.startsWith(xjson_Symbol)) {
-      const description = value.slice(xjson_Symbol.length);
-      if (description.startsWith('-')) return Symbol(description.slice(1));
-      else return Symbol();
-    }
-    if (value.startsWith(xjson_BigInt))
-      return BigInt(value.slice(xjson_BigInt.length));
-    if (value.startsWith(xjson_Buffer))
-      return Buffer.from(value.slice(xjson_Buffer.length), 'base64');
-  }
-  return value;
-}
-
 JSON.xjson_de = (object: any) => {
   const protoType = Object.prototype.toString.call(object);
   if (protoType === '[object Object]' || protoType === '[object Array]') {
@@ -102,47 +37,6 @@ JSON.xjson_de = (object: any) => {
 JSON.xstringify = (...args) => {
   return JSON.stringify(JSON.xjson(args[0]), args[1], args[2] ?? 2);
 };
-
-export
-function parse(text: string) {
-  return replace(JSON.parse(text, function (_, value) {
-    if (typeof value === 'string' && value.startsWith(magicNum)) {
-      if (value === xjson_undefined) return xjson_undefined;
-      if (value === xjson_Infinity) return Infinity;
-      if (value === xjson_NInfinity) return -Infinity;
-      if (value === xjson_NaN) return NaN;
-      if (value.startsWith(xjson_Date))
-        return dayjs(value.slice(xjson_Date.length)).toDate();
-      if (value.startsWith(xjson_Symbol)) {
-        const description = value.slice(xjson_Symbol.length);
-        if (description.startsWith('-')) return Symbol(description.slice(1));
-        else return Symbol();
-      }
-      if (value.startsWith(xjson_BigInt))
-        return BigInt(value.slice(xjson_BigInt.length));
-      if (value.startsWith(xjson_Buffer))
-        return Buffer.from(value.slice(xjson_Buffer.length), 'base64');
-    }
-    return value;
-  }));
-}
-
-export
-class _XJSON {
-  public stringify(
-    value: any,
-    replacer?: (key: string, value: any) => any,
-  ) {
-    return stringify(value, replacer);
-  }
-
-  public parse(text: string) {
-    return parse(text);
-  }
-}
-
-const XJSON = new _XJSON();
-export default XJSON;
 
 export
 function hello() {
