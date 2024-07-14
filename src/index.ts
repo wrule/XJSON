@@ -57,6 +57,28 @@ function traverse(value: any, map: (item: any) => any) {
   }
 }
 
+JSON.xjson = (object: any) => {
+  return JSON.decycle(object, (value) => {
+    let result = value;
+    const protoType = Object.prototype.toString.call(value);
+    if (value === undefined) result = xjson_undefined;
+    if (value === Infinity) result = xjson_Infinity;
+    if (value === -Infinity) result = xjson_NInfinity;
+    if (Number.isNaN(value)) result = xjson_NaN;
+    if (protoType === '[object Date]')
+      result = `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
+    if (protoType === '[object Symbol]')
+      result = `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
+    if (protoType === '[object BigInt]')
+      result = `${xjson_BigInt}${value.toString()}`;
+    if (Buffer.isBuffer(value))
+      result = `${xjson_Buffer}${value.toString('base64')}`;
+    if (protoType === '[object Function]')
+      result = value.toString();
+    return result;
+  });
+};
+
 export
 function xjsonization(
   object: any,
@@ -141,22 +163,23 @@ export
 function hello() {
   let a: any[] = [1, 2, 3, NaN, new Date(), Symbol('sssd'), Buffer.from('1234', 'utf8')];
   a[10] = a;
-  // const a: any = { a: 1, b: 123 };
-  // a.c = a;
-  // a.d.e.y = a.d;
+  console.log(JSON.xjson(a));
+  // // const a: any = { a: 1, b: 123 };
+  // // a.c = a;
+  // // a.d.e.y = a.d;
+  // // console.log(a);
+  // // const b = JSON.decycle(a);
+  // // console.log(b);
+  // // console.log(b.d.e.y);
   // console.log(a);
-  // const b = JSON.decycle(a);
-  // console.log(b);
-  // console.log(b.d.e.y);
-  console.log(a);
-  const c = JSON.decycle(JSON.decycle(a), (value) => {
-    console.log(1111, value);
-    return value;
-  });
-  const d = JSON.retrocycle(JSON.retrocycle(c));
-  // const c = JSON.retrocycle(JSON.retrocycle(JSON.retrocycle(a)));
-  console.log(d);
-  console.log(Object.prototype.toString.call(Buffer.from('234', 'utf8')));
+  // const c = JSON.decycle(JSON.decycle(a), (value) => {
+  //   console.log(1111, value);
+  //   return value;
+  // });
+  // const d = JSON.retrocycle(JSON.retrocycle(c));
+  // // const c = JSON.retrocycle(JSON.retrocycle(JSON.retrocycle(a)));
+  // console.log(d);
+  // console.log(Object.prototype.toString.call(Buffer.from('234', 'utf8')));
   // console.log(JSON.decycle(2));
   // console.log(JSON.retrocycle(3));
 
