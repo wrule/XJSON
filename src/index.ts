@@ -1,4 +1,4 @@
-import './JSON-js/cycle';
+import './JSON-js/cycle_ext';
 import dayjs from 'dayjs';
 
 export const magicNum = 'xjson-28df8c4d-';
@@ -139,15 +139,20 @@ export default XJSON;
 
 export
 function hello() {
-  const a: any = { a: 1, b: 123 };
-  a.c = a;
+  let a: any[] = [1, 2, 3, Buffer.from('1234', 'utf8')];
+  a[4] = a;
+  // const a: any = { a: 1, b: 123 };
+  // a.c = a;
   // a.d.e.y = a.d;
   // console.log(a);
   // const b = JSON.decycle(a);
   // console.log(b);
   // console.log(b.d.e.y);
-  const c = JSON.retrocycle(JSON.retrocycle(JSON.retrocycle(a)));
-  console.log(c);
+  console.log(a);
+  const c = JSON.decycle(JSON.decycle(a));
+  const d = JSON.retrocycle(JSON.retrocycle(c));
+  // const c = JSON.retrocycle(JSON.retrocycle(JSON.retrocycle(a)));
+  console.log(d);
   // console.log(JSON.decycle(2));
   // console.log(JSON.retrocycle(3));
 
