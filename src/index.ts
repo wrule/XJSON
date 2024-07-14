@@ -50,5 +50,9 @@ function hello() {
   ];
   a[10] = { a };
   a[7].array[3] = a[7];
-  console.log(JSON.xjson_de(JSON.xjson(a)));
+  console.log(a);
+  const text = JSON.xstringify(a);
+  console.log(text);
+  const data = JSON.xparse(text);
+  console.log(data);
 }
