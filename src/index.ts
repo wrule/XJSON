@@ -54,10 +54,9 @@ function traverse(value: any, map: (item: any) => any) {
 }
 
 export
-function xjsonization(value: any) {
+function xjsonization(object: any) {
   const cache = new WeakSet<any>();
-  return traverse(value, (item) => {
-    value = item;
+  return traverse(object, (value) => {
     let result = value;
     const protoType = Object.prototype.toString.call(value);
     if (protoType === '[object Object]' || protoType === '[object Array]') {
