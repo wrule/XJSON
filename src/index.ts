@@ -82,6 +82,10 @@ JSON.xjson = (
   });
 };
 
+JSON.xstringify = (...args) => {
+  return JSON.stringify(JSON.xjson(args[0]), args[1], args[2] ?? 2);
+};
+
 export
 function xjsonization(
   object: any,
@@ -167,6 +171,7 @@ function hello() {
   let a: any[] = [1, 2, 3, NaN, new Date(), Symbol('sssd'), Buffer.from('1234', 'utf8')];
   a[10] = a;
   console.log(JSON.xjson(a));
+  console.log(JSON.xjson(undefined));
   // // const a: any = { a: 1, b: 123 };
   // // a.c = a;
   // // a.d.e.y = a.d;
