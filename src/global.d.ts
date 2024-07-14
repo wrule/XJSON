@@ -1,7 +1,7 @@
 
 declare global {
   interface JSON {
-    decycle(value: any): any;
+    decycle(value: any, replacer?: (value: any) => any): any;
     retrocycle(value: any): any;
   }
 }
