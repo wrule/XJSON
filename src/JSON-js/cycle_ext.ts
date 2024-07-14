@@ -1,5 +1,5 @@
 import './cycle.js';
-import { xjson_decycle } from '../index';
+import { xjson_decycle } from '../mapping';
 
 const _JSON: any = JSON;
 
