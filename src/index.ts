@@ -25,6 +25,11 @@ JSON.xstringify = (...args) => {
   return JSON.stringify(JSON.xjson(args[0]), args[1], args[2] ?? 2);
 };
 
+JSON.xparse = (...args) => {
+  const result = JSON.parse(...args);
+  return JSON.xjson_de(result);
+};
+
 export
 function hello() {
   let a: any[] = [1, 2, 3, NaN, new Date(), Symbol('sssd'), Buffer.from('1234', 'utf8')];
