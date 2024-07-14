@@ -13,20 +13,20 @@ export const xjson_Buffer = `${magicNum}Buffer-@data:application/octet-stream;ba
 
 export
 function mapping_forward(value: any) {
-  const protoType = Object.prototype.toString.call(value);
+  const prototype = Object.prototype.toString.call(value);
   if (value === undefined) return xjson_undefined;
   if (value === Infinity) return xjson_Infinity;
   if (value === -Infinity) return xjson_NInfinity;
   if (Number.isNaN(value)) return xjson_NaN;
-  if (protoType === '[object Date]')
+  if (prototype === '[object Date]')
     return `${xjson_Date}${dayjs(value).format('YYYY-MM-DD HH:mm:ss.SSS')}`;
-  if (protoType === '[object Symbol]')
+  if (prototype === '[object Symbol]')
     return `${xjson_Symbol}${value.description === undefined ? '' : `-${value.description}`}`;
-  if (protoType === '[object BigInt]')
+  if (prototype === '[object BigInt]')
     return `${xjson_BigInt}${value.toString()}`;
   if (Buffer.isBuffer(value))
     return `${xjson_Buffer}${value.toString('base64')}`;
-  if (protoType === '[object Function]')
+  if (prototype === '[object Function]')
     return value.toString();
   return value;
 }

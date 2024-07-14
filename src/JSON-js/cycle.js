@@ -67,9 +67,9 @@ if (typeof JSON.decycle !== "function") {
 
 // typeof null === "object", so go on if this value is really an object but not
 // one of the weird builtin objects.
-            const protoType = Object.prototype.toString.call(value);
+            const prototype = Object.prototype.toString.call(value);
             if (
-                protoType === '[object Object]' || protoType === '[object Array]'
+                prototype === '[object Object]' || prototype === '[object Array]'
             ) {
 
 // If the value is an object or array, look to see if we have already

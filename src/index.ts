@@ -1,5 +1,5 @@
 import './JSON-js/cycle_ext';
-import { mapping_forward } from './mapping';
+import { mapping_forward, mapping_reverse, traverse, xjson_decycle } from './mapping';
 
 JSON.xjson = (object: any, replacer?: (value: any) => any) => {
   return JSON.decycle(object, (value) => {
@@ -8,13 +8,17 @@ JSON.xjson = (object: any, replacer?: (value: any) => any) => {
   });
 };
 
-JSON.xjson_de = (object: any) => {
-  const protoType = Object.prototype.toString.call(object);
-  if (protoType === '[object Object]' || protoType === '[object Array]') {
+JSON.xjson_de = (object: any, replacer?: (value: any) => any) => {
+  const prototype = Object.prototype.toString.call(object);
+  if (prototype === '[object Object]' || prototype === '[object Array]') {
     if (!object[xjson_decycle]) return object;
-    return JSON.retrocycle(traverse(object, mapping_de));
+    return JSON.retrocycle(traverse(object, (value) => {
+      const result = mapping_reverse(value);
+      return replacer ? replacer(result) : result;
+    }));
   }
-  return traverse(object, mapping_de);
+  const result = mapping_reverse(object);
+  return replacer ? replacer(result) : result;
 };
 
 JSON.xstringify = (...args) => {
