@@ -32,7 +32,23 @@ JSON.xparse = (...args) => {
 
 export
 function hello() {
-  let a: any[] = [1, 2, 3, NaN, new Date(), Symbol('sssd'), Buffer.from('1234', 'utf8')];
-  a[10] = a;
+  let a: any[] = [
+    1, 2, 3,
+    undefined, null, NaN, Symbol(),
+    {
+      n1: Infinity,
+      n2: -Infinity,
+      text: 'nihao',
+      emoji: '😄这是一个表情',
+      array: [1, null, ''],
+      now: new Date(),
+      bint: BigInt('2828172555111129938002282711233883141526'),
+      json: '{"a": ""}',
+      func: () => { console.log(Symbol('sm')); },
+    },
+    Buffer.from('1234', 'utf8'),
+  ];
+  a[10] = { a };
+  a[7].array[3] = a[7];
   console.log(JSON.xjson_de(JSON.xjson(a)));
 }
