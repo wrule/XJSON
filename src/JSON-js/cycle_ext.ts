@@ -20,8 +20,8 @@ JSON.retrocycle = (value: any) => {
   const prototype = Object.prototype.toString.call(value);
   if (prototype === '[object Object]' || prototype === '[object Array]') {
     if (!value[xjson_decycle]) throw 'not a cycle object';
+    if (value[xjson_decycle] === '[object Array]') value = value.result;
     let result = _JSON._retrocycle(value);
-    if (result[xjson_decycle] === '[object Array]') result = result.result;
     delete result[xjson_decycle];
     return result;
   }

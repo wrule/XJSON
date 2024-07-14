@@ -51,7 +51,7 @@ function hello() {
   a[10] = { a };
   a[7].array[3] = a[7];
   console.log(1, a);
-  console.log(2, JSON.xjson(a));
+  // console.log(2, JSON.xjson(a));
   const text = JSON.xstringify(a);
   console.log(3, text);
   const data = JSON.xparse(text);
