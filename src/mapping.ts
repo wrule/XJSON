@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 
-export const magicNum = 'xjson-28df8c4d-';
+export const magicNum = 'xs-28df-';
 export const xjson_decycle = `${magicNum}decycle`;
+export const xjson_ref = `${magicNum}ref-`;
 export const xjson_undefined = `${magicNum}undefined`;
 export const xjson_Infinity = `${magicNum}Infinity`;
 export const xjson_NInfinity = `${magicNum}NInfinity`;
